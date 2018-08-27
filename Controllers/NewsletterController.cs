@@ -1,6 +1,8 @@
-﻿using Blog.SubscribeMeProject.Models;
-using Blog.SubscribeMeProject.Repositories;
-using Blog.SubscribeMeProject.Requests;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using Blog.SubscribeMeProject.Infrastructure.Models;
+using Blog.SubscribeMeProject.Infrastructure.Repositories;
+using Blog.SubscribeMeProject.Infrastructure.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.SubscribeMeProject.Controllers
@@ -9,17 +11,17 @@ namespace Blog.SubscribeMeProject.Controllers
     [ApiController]
     public class NewsletterController : ControllerBase
     {
-        private readonly INewsletterRepository _newsletterRepository;
+        private readonly ISubscriptionRepository _subscriptionRepository;
 
-        public NewsletterController(INewsletterRepository newsletterRepository)
+        public NewsletterController(ISubscriptionRepository subscriptionRepository)
         {
-            _newsletterRepository = newsletterRepository;
+            _subscriptionRepository = subscriptionRepository;
         }
 
-        [HttpGet("{email:email}")]
-        public IActionResult Get(string email)
+        [HttpGet("{email:required}")]
+        public async Task<IActionResult> Get([EmailAddress]string email)
         {
-            var subscription = _newsletterRepository.Get(email);
+            var subscription =  await _subscriptionRepository.Get(email);
 
             if (subscription == null) return NotFound();
 
@@ -27,26 +29,26 @@ namespace Blog.SubscribeMeProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(SubscriptionRequest request)
+        public async Task<IActionResult> Post(SubscriptionRequest request)
         {
             var subscription = new Subscription
             {
                 Email = request.Email,
                 IsActive = true
             };
-            _newsletterRepository.Add(subscription);
+            await _subscriptionRepository.Add(subscription);
 
             return Created(nameof(Get), new { email= subscription.Email });
         }
         
         [HttpDelete]
-        public IActionResult Delete(SubscriptionRequest request)
+        public async Task<IActionResult> Delete(SubscriptionRequest request)
         {
-            var target = _newsletterRepository.Get(request.Email);
+            var target = await _subscriptionRepository.Get(request.Email);
 
             if (target == null) return NotFound();
         
-            _newsletterRepository.Remove(target.Email);
+            _subscriptionRepository.Remove(target.Email);
 
             return NoContent();
         }
