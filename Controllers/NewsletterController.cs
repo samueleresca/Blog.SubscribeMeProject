@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Blog.SubscribeMeProject.Models;
+using Blog.SubscribeMeProject.Repositories;
+using Blog.SubscribeMeProject.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.SubscribeMeProject.Controllers
@@ -10,36 +9,47 @@ namespace Blog.SubscribeMeProject.Controllers
     [ApiController]
     public class NewsletterController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public IActionResult Get()
+        private readonly INewsletterRepository _newsletterRepository;
+
+        public NewsletterController(INewsletterRepository newsletterRepository)
         {
-            return NoContent();
+            _newsletterRepository = newsletterRepository;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{email:email}")]
+        public IActionResult Get(string email)
         {
-            return NoContent();
+            var subscription = _newsletterRepository.Get(email);
+
+            if (subscription == null) return NotFound();
+
+            return Ok(subscription);
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(SubscriptionRequest request)
         {
+            var subscription = new Subscription
+            {
+                Email = request.Email,
+                IsActive = true
+            };
+            _newsletterRepository.Add(subscription);
+
+            return Created(nameof(Get), new { email= subscription.Email });
+        }
+        
+        [HttpDelete]
+        public IActionResult Delete(SubscriptionRequest request)
+        {
+            var target = _newsletterRepository.Get(request.Email);
+
+            if (target == null) return NotFound();
+        
+            _newsletterRepository.Remove(target.Email);
+
+            return NoContent();
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
