@@ -31,11 +31,18 @@ namespace Blog.SubscribeMeProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(SubscriptionRequest request)
         {
+            var result = await _subscriptionRepository.Get(request.Email);
+
+            if(result != null) {
+                return BadRequest();
+            }
+
             var subscription = new Subscription
             {
                 Email = request.Email,
                 IsActive = true
             };
+
             await _subscriptionRepository.Add(subscription);
 
             return Created(nameof(Get), new { email= subscription.Email });

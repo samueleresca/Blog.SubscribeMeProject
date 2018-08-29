@@ -27,7 +27,7 @@ namespace Blog.SubscribeMeProject.Tests.Fixtures
         }
 
         public async Task<Subscription> Get(string email) =>
-        await Task.Run(() => _repository.FirstOrDefault(_ => _.Email == email));
+        await Task.Run(() => _repository.First(_ => _.Email == email));
 
         public async Task Remove(string email)
         {
