@@ -41,14 +41,14 @@ namespace Blog.SubscribeMeProject.Controllers
             return Created(nameof(Get), new { email= subscription.Email });
         }
         
-        [HttpDelete]
-        public async Task<IActionResult> Delete(SubscriptionRequest request)
+        [HttpDelete("{email:required}")]
+        public async Task<IActionResult> Delete([EmailAddress]string email)
         {
-            var target = await _subscriptionRepository.Get(request.Email);
+            var target = await _subscriptionRepository.Get(email);
 
             if (target == null) return NotFound();
         
-            _subscriptionRepository.Remove(target.Email);
+            await _subscriptionRepository.Remove(target.Email);
 
             return NoContent();
         }

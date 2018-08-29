@@ -57,7 +57,7 @@ namespace Blog.SubscribeMeProject.Infrastructure.Repositories
             try
             {
                 var updated = new Subscription {IsActive = false, Email = email};
-                await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_databaseName, _collectionName, email), updated);
+                 await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_databaseName, _collectionName, email), updated);
             }
             catch (Exception e)
             {
