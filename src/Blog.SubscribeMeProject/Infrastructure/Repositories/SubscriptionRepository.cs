@@ -15,7 +15,7 @@ namespace Blog.SubscribeMeProject.Infrastructure.Repositories
         private readonly string _collectionName;
         private readonly ILogger<SubscriptionRepository> _logger;
 
-        public SubscriptionRepository(IOptions<DataSourceConfig> dataSourceConfig, ILogger<SubscriptionRepository> logger)
+        public SubscriptionRepository(IOptions<ConnectionStrings> dataSourceConfig, ILogger<SubscriptionRepository> logger)
         {
             _client = new DocumentClient(new Uri(dataSourceConfig.Value.EndpointURI),
                 dataSourceConfig.Value.PrimaryKey);

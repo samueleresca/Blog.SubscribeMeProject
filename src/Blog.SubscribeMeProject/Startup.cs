@@ -19,7 +19,7 @@ namespace Blog.SubscribeMeProject
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<DataSourceConfig>(Configuration.GetSection("DataSourceConfig"));
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

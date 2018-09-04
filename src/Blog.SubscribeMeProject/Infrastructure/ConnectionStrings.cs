@@ -1,6 +1,6 @@
 ﻿namespace Blog.SubscribeMeProject.Infrastructure
 {
-    public class DataSourceConfig
+    public class ConnectionStrings
     {
         public string EndpointURI { get; set; }
         public string PrimaryKey { get; set; }
