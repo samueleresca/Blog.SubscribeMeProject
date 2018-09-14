@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Blog.SubscribeMeProject
 {
@@ -21,11 +22,12 @@ namespace Blog.SubscribeMeProject
         {
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
-            
+           
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,  
+            ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -36,6 +38,8 @@ namespace Blog.SubscribeMeProject
                 app.UseHsts();
             }
 
+            loggerFactory.AddDebug();
+            loggerFactory.AddAzureWebAppDiagnostics();
             
             app.UseHttpsRedirection();
             app.UseMvc();

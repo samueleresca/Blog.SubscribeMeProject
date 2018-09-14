@@ -31,39 +31,28 @@ namespace Blog.SubscribeMeProject.Infrastructure.Repositories
                 return await _client.ReadDocumentAsync<Subscription>(
                     UriFactory.CreateDocumentUri(_databaseName, _collectionName, email));
             }
-            catch (DocumentClientException de)
+            catch (DocumentClientException e)
             {
+                if (e.StatusCode.HasValue &&
+                   e.StatusCode.Value == System.Net.HttpStatusCode.NotFound)
+                {
                     return null;
+                }
+                throw e;
             }
 
         }
 
         public async Task Add(Subscription subscription)
         {
-            try
-            {
-                await _client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName),
-                    subscription);
-            }
-            catch (Exception  e)
-            {
-                _logger.LogError(e.Message);
-            }
-          
+            await _client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName),
+                subscription);
         }
 
         public async Task Remove(string email)
         {
-            try
-            {
-                var updated = new Subscription {IsActive = false, Email = email};
-                 await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_databaseName, _collectionName, email), updated);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-            }
-           
+            var updated = new Subscription { IsActive = false, Email = email };
+            await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_databaseName, _collectionName, email), updated);
         }
     }
 }

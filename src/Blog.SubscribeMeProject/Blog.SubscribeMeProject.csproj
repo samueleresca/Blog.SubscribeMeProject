@@ -14,5 +14,11 @@
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core">
       <Version>2.0.0-preview2</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Azure.DocumentDB.Core">
+      <HintPath>C:\Users\samuele.resca.JUST-EAT\.nuget\packages\microsoft.azure.documentdb.core\2.0.0-preview2\lib\netstandard1.6\Microsoft.Azure.DocumentDB.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
