@@ -40,7 +40,7 @@ namespace Blog.SubscribeMeProject
 
             loggerFactory.AddDebug();
             loggerFactory.AddAzureWebAppDiagnostics();
-            
+            app.UseCors( _ => _.WithOrigins("https://samueleresca.net").AllowAnyMethod() );
             app.UseHttpsRedirection();
             app.UseMvc();
         }
