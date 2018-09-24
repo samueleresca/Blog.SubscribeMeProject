@@ -22,7 +22,7 @@ namespace Blog.SubscribeMeProject
         {
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
-           
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
