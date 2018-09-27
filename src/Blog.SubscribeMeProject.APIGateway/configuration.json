@@ -1,35 +1,23 @@
 {
     "ReRoutes": [
         {
-            "DownstreamPathTemplate": "/api/values",
-            "DownstreamScheme": "http",
+            "DownstreamPathTemplate": "/api/newsletter",
+            "DownstreamScheme": "https",
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 9001
+                    "Port": 5001
                 }
             ],
-            "UpstreamPathTemplate": "/customers",
-            "UpstreamHttpMethod": [ "Get" ],
+            "UpstreamPathTemplate": "/api/newsletter",
+            "UpstreamHttpMethod": [ "Post" ],
             "RateLimitOptions": {
                 "ClientWhitelist": [],
                 "EnableRateLimiting": true,
-                "Period": "1h",
+                "Period": "1s",
                 "PeriodTimespan": 100,
                 "Limit": 1
             }
-        },
-        {
-            "DownstreamPathTemplate": "/api/values/{id}",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "localhost",
-                    "Port": 9001
-                }
-            ],
-            "UpstreamPathTemplate": "/customers/{id}",
-            "UpstreamHttpMethod": [ "Get" ]
         }
     ],
     "GlobalConfiguration": {
@@ -37,7 +25,7 @@
         "AdministrationPath": "/administration",
         "RateLimitOptions": {            
             "DisableRateLimitHeaders": false,
-            "QuotaExceededMessage": "Customize Tips!"
+            "QuotaExceededMessage": "Rate limit exceeded!"
         }
     }
 }
